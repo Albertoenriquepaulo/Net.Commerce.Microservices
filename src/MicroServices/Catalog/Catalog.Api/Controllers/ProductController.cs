@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Catalog.Service.EventHandlers.Commands;
 using Catalog.Service.Queries;
 using Catalog.Service.Queries.DTOs;
+using MediatR;
 using Service.Common.Collection;
 
 namespace Catalog.Api.Controllers
@@ -14,14 +16,17 @@ namespace Catalog.Api.Controllers
     [Route("products")]
     public class ProductController : ControllerBase
     {
-        private readonly ILogger<DefaultController> _logger;
+        private readonly ILogger<ProductController> _logger;
 
         private readonly IProductQueryService _productQueryService;
 
-        public ProductController(ILogger<DefaultController> logger, IProductQueryService productQueryService)
+        private readonly IMediator _mediator;
+
+        public ProductController(ILogger<ProductController> logger, IProductQueryService productQueryService, IMediator mediator)
         {
             _logger = logger;
             _productQueryService = productQueryService;
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -45,6 +50,14 @@ namespace Catalog.Api.Controllers
             var result = await _productQueryService.GetAsync(id);
 
             return result;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(ProductCreateCommand command)
+        {
+            await _mediator.Publish(command);
+            return Ok();
+
         }
     }
 }
