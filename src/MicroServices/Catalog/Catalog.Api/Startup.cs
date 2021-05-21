@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Catalog.Service.Queries;
 
 namespace Catalog.Api
 {
@@ -26,11 +27,13 @@ namespace Catalog.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => 
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    x=> x.MigrationsHistoryTable("__EFMigrationsHistory", "Catalog")
+                    x => x.MigrationsHistoryTable("__EFMigrationsHistory", "Catalog")
                 ));
+
+            services.AddTransient<IProductQueryService, ProductQueryService>();
 
             services.AddControllers();
         }
