@@ -18,6 +18,10 @@ namespace Catalog.Persistence.Database
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
+
             // Database schema
             modelBuilder.HasDefaultSchema("Catalog");
 

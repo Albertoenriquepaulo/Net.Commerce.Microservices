@@ -21,7 +21,7 @@ namespace Catalog.Persistence.Database.Configuration
             var products = new List<Product>();
             var random = new Random();
 
-            for (var i = 0; i < 101; i++)
+            for (var i = 1; i < 101; i++)
             {
                 products.Add(new Product()
                 {
